@@ -278,8 +278,13 @@ function importFromJson(e) {
 
 async function exportToDocx() {
     try {
-        if (!window.docx) { alert("DOCX library not loaded yet. Please wait."); return; }
-        const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = window.docx;
+        console.log("Checking DOCX library...", window.docx);
+        const docxLib = window.docx || (typeof docx !== 'undefined' ? docx : null);
+        if (!docxLib) {
+            alert("DOCX library not loaded yet. Please wait a few seconds or check your connection.");
+            return;
+        }
+        const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docxLib;
 
         const children = [];
 
