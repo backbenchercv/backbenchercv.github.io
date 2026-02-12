@@ -434,6 +434,50 @@ textarea:focus {
 }
 
 
+/* Website Footer */
+footer {
+    background: rgba(26, 31, 58, 0.4);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 0;
+    margin-top: 40px;
+    z-index: 100;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.footer-social a {
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.footer-social a:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.footer-social svg {
+    width: 18px;
+    height: 18px;
+}
+
 /* Print Specific Overrides */
 @media print {
     body {
