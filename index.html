@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backbencher | ATS Friendly Resume Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.3/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    
+    <header>
+        <div class="header-content">
+            <h1 class="logo">BACKBENCHER <span class="accent">ATS</span></h1>
+            <div class="actions">
+                <button id="importJson" class="btn-outline"><i data-lucide="upload"></i> Import JSON</button>
+                <input type="file" id="jsonInput" style="display: none;" accept=".json">
+                <button id="exportJson" class="btn-outline"><i data-lucide="download"></i> Export JSON</button>
+                <button id="exportDocx" class="btn-primary"><i data-lucide="file-text"></i> Export DOCX</button>
+                <button id="printResume" class="btn-primary"><i data-lucide="printer"></i> Print</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="editor">
+            <div class="card">
+                <h2><i data-lucide="user"></i> Personal Information</h2>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="e.g. Lakshmi Narayana">
+                    </div>
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title</label>
+                        <input type="text" id="jobTitle" placeholder="e.g. Manufacturing Systems Analyst">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="e.g. info@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" id="phone" placeholder="e.g. +91 818689 1961">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="linkedin">LinkedIn URL</label>
+                        <input type="text" id="linkedin" placeholder="e.g. linkedin.com/in/username">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="e.g. Hyderabad, India">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="summary">Professional Summary</label>
+                        <textarea id="summary" rows="4" placeholder="Briefly describe your professional background and key strengths..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="experience-section">
+                <div class="section-header">
+                    <h2><i data-lucide="briefcase"></i> Work Experience</h2>
+                    <button class="btn-add" onclick="addItem('experience')"><i data-lucide="plus"></i> Add</button>
+                </div>
+                <div id="experience-list" class="dynamic-list"></div>
+            </div>
+
+            <div class="card" id="education-section">
+                <div class="section-header">
+                    <h2><i data-lucide="graduation-cap"></i> Education</h2>
+                    <button class="btn-add" onclick="addItem('education')"><i data-lucide="plus"></i> Add</button>
+                </div>
+                <div id="education-list" class="dynamic-list"></div>
+            </div>
+
+            <div class="card" id="skills-section">
+                <div class="section-header">
+                    <h2><i data-lucide="wrench"></i> Core Competencies (Skills)</h2>
+                    <button class="btn-add" onclick="addSkillCategory()"><i data-lucide="plus"></i> Add Category</button>
+                </div>
+                <div id="skills-list" class="dynamic-list"></div>
+            </div>
+
+            <div class="card" id="certifications-section">
+                <div class="section-header">
+                    <h2><i data-lucide="award"></i> Certifications</h2>
+                    <button class="btn-add" onclick="addItem('certification')"><i data-lucide="plus"></i> Add</button>
+                </div>
+                <div id="certification-list" class="dynamic-list"></div>
+            </div>
+
+            <div class="card" id="projects-section">
+                <div class="section-header">
+                    <h2><i data-lucide="lightbulb"></i> Projects & Achievements</h2>
+                    <button class="btn-add" onclick="addItem('project')"><i data-lucide="plus"></i> Add Project</button>
+                </div>
+                <div id="project-list" class="dynamic-list"></div>
+            </div>
+        </section>
+
+        <section class="preview-container">
+            <div id="resume-preview" class="resume-paper">
+                <!-- Preview content will be injected here by JS -->
+                <div class="preview-placeholder">
+                    <i data-lucide="eye" size="48"></i>
+                    <p>Enter your details to generate live preview</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
