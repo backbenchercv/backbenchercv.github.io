@@ -1,23 +1,21 @@
 const state = {
     personal: {
-        fullName: 'JOHN DOE',
-        jobTitle: 'Software Engineer',
-        email: 'john.doe@example.com',
-        phone: '+91 1234567890',
-        linkedin: 'linkedin.com/in/johndoe',
-        location: 'Hyderabad, India',
-        summary: 'A highly motivated software professional with expertise in web development and cloud technologies.',
-        portfolio: 'johndoe.dev',
-        roles: 'Senior Developer, Full Stack Engineer, Tech Lead'
+        fullName: '',
+        jobTitle: '',
+        email: '',
+        phone: '',
+        linkedin: '',
+        location: '',
+        summary: '',
+        portfolio: '',
+        roles: ''
     },
     experience: [],
     education: [],
-    skills: [
-        { id: 1, name: 'Technical Skills', skills: ['JavaScript', 'React', 'Node.js', 'Python'] }
-    ],
-    softSkills: 'Team Leadership, Communication, Problem Solving',
-    languages: 'English, Hindi, Telugu',
-    hobbies: 'Coding, Reading, Traveling',
+    skills: [],
+    softSkills: '',
+    languages: '',
+    hobbies: '',
     certifications: [],
     projects: []
 };
