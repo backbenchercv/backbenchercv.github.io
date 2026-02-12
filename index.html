@@ -22,7 +22,7 @@
                 <input type="file" id="jsonInput" style="display: none;" accept=".json">
                 <button id="exportJson" class="btn-outline"><i data-lucide="download"></i> Export JSON</button>
                 <button id="exportDocx" class="btn-primary"><i data-lucide="file-text"></i> Export DOCX</button>
-                <button id="printResume" class="btn-primary"><i data-lucide="printer"></i> Print</button>
+                <button id="printResume" class="btn-primary"><i data-lucide="file-down"></i> Save as PDF</button>
             </div>
         </div>
     </header>
@@ -61,9 +61,36 @@
                         <input type="text" id="location" placeholder="e.g. Hyderabad, India">
                     </div>
                     <div class="form-group full-width">
-                        <label for="summary">About Me</label>
+                        <label for="roles">Desired Roles (e.g. Senior Analyst, PPC Engineer)</label>
+                        <input type="text" id="roles" placeholder="e.g. Role 1, Role 2, Role 3">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="summary">Professional Summary / About Me</label>
                         <textarea id="summary" rows="4"
                             placeholder="Briefly describe your professional background and key strengths..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i data-lucide="pen-tool"></i> Declaration & Signature</h2>
+                <div class="grid">
+                    <div class="form-group full-width">
+                        <label for="declaration">Declaration Text</label>
+                        <textarea id="declaration" rows="2"
+                            placeholder="I hereby declare that the above written particulars are true..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="place">Place</label>
+                        <input type="text" id="place" placeholder="e.g. Hyderabad">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="text" id="date" placeholder="e.g. 12-08-2025">
+                    </div>
+                    <div class="form-group">
+                        <label for="preferredName">Preferred Name (for Signature)</label>
+                        <input type="text" id="preferredName" placeholder="e.g. Lalithchary">
                     </div>
                 </div>
             </div>
@@ -99,6 +126,26 @@
                     <button class="btn-add" onclick="addItem('certification')"><i data-lucide="plus"></i> Add</button>
                 </div>
                 <div id="certification-list" class="dynamic-list"></div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h2><i data-lucide="smile"></i> Soft Skills & Languages</h2>
+                </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="softSkills">Soft Skills (Comma separated)</label>
+                        <input type="text" id="softSkills" placeholder="e.g. Problem Solving, Analytical Thinking">
+                    </div>
+                    <div class="form-group">
+                        <label for="languages">Languages (Comma separated)</label>
+                        <input type="text" id="languages" placeholder="e.g. English, Telugu, Hindi">
+                    </div>
+                </div>
+                <div class="form-group full-width" style="margin-top: 15px;">
+                    <label for="hobbies">Interests & Hobbies (Comma separated)</label>
+                    <input type="text" id="hobbies" placeholder="e.g. 3D Printing, PC Building">
+                </div>
             </div>
 
             <div class="card" id="projects-section">

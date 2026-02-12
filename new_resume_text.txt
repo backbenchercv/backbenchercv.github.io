@@ -1,0 +1,102 @@
+MODEPALLI LAKSHMI NARAYANACHARY
+lalithtinku@gmail.com                                                                    +91 8186891961
+https://www.linkedin.com/in/lalithchary/                                       Pragathi Nagar, Hyderabad
+
+Roles:
+|| Senior Business systems Analyst || PPC Engineer || Material Planning and Product Costing ||
+
+Professional Summary
+Resourceful Manufacturing Systems Analyst with 8 years of experience started with production planning, material
+management, and process optimization in manufacturing environments. Expertise in integrating IT solutions to
+improve production workflows, increase efficiency, and reduce costs. Strong background in system design,
+development, and automation for manufacturing and IT processes.
+
+Work Experience
+Diligent SCM Solutions Pvt Ltd — Jan 2017 – May 2025
+Diligent is a global manufacturer specializing in high-performance seals and hardware components made from Cobalt
+and Nickel based super alloys, used in power plants and turbines.
+Here I started my career as a PPC Engineer, then I transitioned to the Material Planning engineer for the whole
+company including Product Costing group. Later I moved into the Business systems Analyst group to deal with the
+build mistake proof business process system, which requires less effort.
+
+Roles:
+Business Systems Analyst – 2020- 2025
+ ● My role is to deal with the departmental and interdepartmental processes flaws and system issues.
+ ● Build the optimal solutions which require less effort along with mistake proof solutions by adopting Japanese
+    manufacturing principles to eliminate Non-Value-Added (NVA) steps and streamline inter departmental
+    processes.
+ ● Designed and implemented mistake-proof systems for inventory management, business P&L creation, material
+    planning, and export shipping.
+ ● Played a pivotal role from ground level to top in the Advance License Scheme (duty-free import process), handling
+    the opening and closing of 40+ licenses with the Directorate General of Foreign Trade (DGFT).
+ ● Handling of Statutory and compliance requirements from the CHA, Customs and DGFT.
+
+Material Planning & Product Costing -2019-2020
+● Annual material planning for all parts using customer forecasts to ensure timely availability of materials.
+● Collected price quotes, performed cost comparisons, and placed orders to suppliers while managing dispatch
+    schedules.
+● Conducted cost estimation for sheets for all parts based on customer drawings to maintain competitive pricing.
+● Monthly RM Cost for exported goods for the P & L along with the Purchase price variance.
+
+PPC Engineer - 2017-2019
+ ● Optimized customer orders by grouping and nesting them to minimize scrap during production.
+ ● Created and managed job cards to ensure timely execution and adherence to customer requirements.
+ ● Dealt with ~5000 variants and 15,000 PO lines per year.
+ ● Job card optimization (improved visualization rather than words)
+ ● Creating work instructions and SOP’s for the processes.
+
+Projects & Achievements
+ ● Training: Training the people in each role to make time for myself to learn new skills.
+ ● Modernization of Job card: Removed the non-value added and repetitive data fields, added visualization and
+     automized it.
+ ● Material Flow Optimization: Implemented FIFO (First In, First Out) system for material flow on the shop floor,
+     reducing waste and improving line balancing.
+●    Raw material yield Improvement: Optimizing the nesting and cutting process to reduce the scrap by 6% for
+     imported material
+●    Inventory Management Dashboard: Developed a real-time dashboard to enable quick decision-making in
+     inventory management.
+●    Employee Leave Application: Designed an automated employee leave request system using Microsoft power
+     platform.
+●    Expense/Advance Forms: Created automated forms with approval and verification levels for seamless financial
+     operations.
+●    Intranet Website App: Developed an internal web app to provide employees with easy access to resources,
+     enhancing communication.
+●    Advance licenses Closed: Closed old pending advance licenses to meet the statutory requirements of
+     government to continue to avail the duty-free benefit on import raw material.
+●    Data Security: Met the customer audit requirements in IT infrastructure and Data security.
+
+Technical Skills
+ ● Manufacturing & IT Systems: Inventory Management, Material Planning, P&L Creation, Production Scheduling,
+    Export Shipping, Duty-Free Import Schemes
+ ● Software & Tools: Microsoft Office Suite (Excel, Word, PowerPoint, Teams, Forms, PowerApps, Power Automate,
+    SharePoint, OneDrive, Power BI), Tableau, Windows and Linux OS, Home Lab, Troubleshooting, Helpdesk
+    Support
+ ● Process Design & Automation tools: Process Mapping, Flowchart Creation, System Automation
+
+Soft Skills
+ ● Problem Solving, Analytical Thinking, Adaptability, Result-Oriented, Cross-functional Collaboration, Quick-
+     learner.
+
+Languages
+ ● Telugu, Hindi, English
+
+Certifications
+● Microsoft Excel Expert Certification
+● Lean Six Sigma - White Belt
+● Kano Analysis Expert
+● Career Essentials in System Administration by Microsoft and LinkedIn
+
+Interests & Hobbies
+• Home Lab , IoT, Home Automation, Linux, PC Building, 3D Printing, Exploring New Technologies
+
+Education:
+M. Tech in Machine Design - Anubose institute of Technology, Plavoncha - 2014 – 2016 – 73%
+B. Tech in Mechanical Engineering - Sri Kavitha Engineering College, Karepalli - 2010 – 2014 – 68%
+Intermediate and Schooling - Nalanda Jr College, Kothagudem - 2008 – 2010 - 86%
+
+Declaration:
+       I hereby declare that the above written particulars are true to the best of my knowledge and belief.
+
+Place: Hyderabad                                                            (Modepalli Lakshmi Narayanachary)
+Date:                                                                       (preferred name: Lalithchary)
+

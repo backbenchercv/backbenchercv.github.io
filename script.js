@@ -1,25 +1,51 @@
 const state = {
-    personal: {},
+    personal: {
+        fullName: '',
+        jobTitle: '',
+        email: '',
+        phone: '',
+        linkedin: '',
+        location: '',
+        summary: '',
+        portfolio: '',
+        roles: '',
+        declaration: 'I hereby declare that the above written particulars are true to the best of my knowledge and belief.',
+        place: 'Hyderabad',
+        date: '',
+        preferredName: ''
+    },
     experience: [],
     education: [],
     skills: [],
+    softSkills: '',
+    languages: '',
+    hobbies: '',
     certifications: [],
     projects: []
 };
 
 function init() {
     setupEventListeners();
-    addSkillCategory('Core Competencies');
+    addSkillCategory('Technical Skills');
     updatePreview();
 }
 
 function setupEventListeners() {
-    const inputs = ['fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location', 'summary', 'portfolio'];
+    const inputs = [
+        'fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location',
+        'summary', 'portfolio', 'roles', 'declaration', 'place', 'date',
+        'preferredName', 'softSkills', 'languages', 'hobbies'
+    ];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             el.addEventListener('input', (e) => {
-                state.personal[id] = e.target.value;
+                const val = e.target.value;
+                if (['softSkills', 'languages', 'hobbies'].includes(id)) {
+                    state[id] = val;
+                } else {
+                    state.personal[id] = val;
+                }
                 updatePreview();
             });
         }
@@ -55,7 +81,6 @@ function addItem(type) {
     updatePreview();
 }
 
-// Rendering helpers for Editor UI
 function renderExperienceItem(item) {
     const container = document.getElementById('experience-list');
     const div = document.createElement('div');
@@ -65,10 +90,10 @@ function renderExperienceItem(item) {
         <button class="btn-remove" onclick="removeItem('experience', ${item.id})"><i data-lucide="trash-2"></i></button>
         <div class="grid">
             <div class="form-group"><label>Company</label><input type="text" value="${item.company}" oninput="updateItem('experience', ${item.id}, 'company', this.value)"></div>
-            <div class="form-group"><label>Role</label><input type="text" value="${item.role}" oninput="updateItem('experience', ${item.id}, 'role', this.value)"></div>
             <div class="form-group"><label>Dates</label><input type="text" value="${item.dates}" oninput="updateItem('experience', ${item.id}, 'dates', this.value)"></div>
+            <div class="form-group"><label>Role</label><input type="text" value="${item.role}" oninput="updateItem('experience', ${item.id}, 'role', this.value)"></div>
             <div class="form-group"><label>Location</label><input type="text" value="${item.location}" oninput="updateItem('experience', ${item.id}, 'location', this.value)"></div>
-            <div class="form-group full-width"><label>Description</label><textarea oninput="updateItem('experience', ${item.id}, 'description', this.value)" rows="3">${item.description}</textarea></div>
+            <div class="form-group full-width"><label>Description (Markdown bullets supported)</label><textarea oninput="updateItem('experience', ${item.id}, 'description', this.value)" rows="3">${item.description}</textarea></div>
         </div>
     `;
     container.appendChild(div);
@@ -84,8 +109,8 @@ function renderEducationItem(item) {
         <button class="btn-remove" onclick="removeItem('education', ${item.id})"><i data-lucide="trash-2"></i></button>
         <div class="grid">
             <div class="form-group"><label>School</label><input type="text" value="${item.school}" oninput="updateItem('education', ${item.id}, 'school', this.value)"></div>
-            <div class="form-group"><label>Degree</label><input type="text" value="${item.degree}" oninput="updateItem('education', ${item.id}, 'degree', this.value)"></div>
             <div class="form-group"><label>Dates</label><input type="text" value="${item.dates}" oninput="updateItem('education', ${item.id}, 'dates', this.value)"></div>
+            <div class="form-group"><label>Degree</label><input type="text" value="${item.degree}" oninput="updateItem('education', ${item.id}, 'degree', this.value)"></div>
             <div class="form-group"><label>Grade</label><input type="text" value="${item.grade}" oninput="updateItem('education', ${item.id}, 'grade', this.value)"></div>
         </div>
     `;
@@ -167,12 +192,9 @@ function removeItem(type, id) {
     updatePreview();
 }
 
-// Icon Helper
-const getIcon = (name) => `<i data-lucide="${name}"></i>`;
-
 function updatePreview() {
     const preview = document.getElementById('resume-preview');
-    const { personal, experience, education, skills, certifications, projects } = state;
+    const { personal, experience, education, skills, certifications, projects, softSkills, languages, hobbies } = state;
 
     if (!personal.fullName && experience.length === 0 && education.length === 0) {
         preview.innerHTML = `<div class="preview-placeholder"><i data-lucide="eye" size="48"></i><p>Enter details for live preview</p></div>`;
@@ -180,77 +202,107 @@ function updatePreview() {
         return;
     }
 
-    // Name Typography: Bold First/Middle, Thin Last
-    let nameHtml = personal.fullName || 'YOUR NAME';
-    if (personal.fullName) {
-        const parts = personal.fullName.split(' ');
-        if (parts.length > 1) {
-            const last = parts.pop();
-            nameHtml = `<span class="first-name">${parts.join(' ')}</span><span class="last-name">${last}</span>`;
-        } else {
-            nameHtml = `<span class="first-name">${personal.fullName}</span>`;
+    // Header Construction
+    let contactLines = [];
+    if (personal.email || personal.phone) {
+        contactLines.push(`${personal.email || ''}${personal.email && personal.phone ? ' &nbsp;&nbsp;&nbsp;&nbsp; ' : ''}${personal.phone || ''}`);
+    }
+    if (personal.linkedin || personal.location || personal.portfolio) {
+        const parts = [personal.linkedin, personal.location, personal.portfolio].filter(Boolean);
+        contactLines.push(parts.join(' &nbsp;&nbsp;&nbsp; '));
+    }
+
+    let rolesHtml = '';
+    if (personal.roles) {
+        const rolesList = personal.roles.split(',').map(r => r.trim()).filter(Boolean);
+        if (rolesList.length) {
+            rolesHtml = `<div class="roles-bar">|| ${rolesList.join(' || ')} ||</div>`;
         }
     }
 
     let html = `
         <div class="resume-header">
-            <div class="name-container">${nameHtml}</div>
-            <div class="job-title">${personal.jobTitle || ''}</div>
+            <div class="name-container">${(personal.fullName || 'YOUR NAME').toUpperCase()}</div>
             <div class="contact-bar">
-                ${personal.phone ? `<div class="contact-item">${getIcon('phone')} ${personal.phone}</div>` : ''}
-                ${personal.email ? `<div class="contact-item">${getIcon('mail')} ${personal.email}</div>` : ''}
-                ${personal.location ? `<div class="contact-item">${getIcon('map-pin')} ${personal.location}</div>` : ''}
-                ${personal.linkedin ? `<div class="contact-item">${getIcon('linkedin')} ${personal.linkedin}</div>` : ''}
-                ${personal.portfolio ? `<div class="contact-item">${getIcon('globe')} ${personal.portfolio}</div>` : ''}
+                ${contactLines.map(line => `<div>${line}</div>`).join('')}
             </div>
+            ${rolesHtml}
         </div>
-        <div class="resume-body">
-            <div class="sidebar">
-                <section>
-                    <span class="section-header-sidebar">Education</span>
-                    ${education.map(edu => `
-                        <div class="sidebar-item">
-                            <div class="sidebar-item-bold">${edu.school}</div>
-                            <div>${edu.degree}</div>
-                            <div style="font-size: 8.5pt;">${edu.dates} ${edu.grade ? `| ${edu.grade}` : ''}</div>
-                        </div>
-                    `).join('')}
-                </section>
-                <section>
-                    <span class="section-header-sidebar">Skills</span>
-                    ${skills.map(cat => `
-                        <div class="skill-group">
-                            <span class="skill-label">${cat.name}</span>
-                            <div class="skill-tags">${cat.skills.join(', ')}</div>
-                        </div>
-                    `).join('')}
-                </section>
-                <section>
-                    <span class="section-header-sidebar">Certifications</span>
-                    ${certifications.map(cert => `<div class="sidebar-item">${cert.name}</div>`).join('')}
-                </section>
-            </div>
-            <div class="main-content">
-                ${personal.summary ? `<section><h3>About Me</h3><p>${personal.summary}</p></section>` : ''}
-                ${experience.length ? `<section><h3>Work Experience</h3>${experience.map(exp => `
-                    <div class="entry">
-                        <div class="entry-header"><span>${exp.company}</span><span>${exp.dates}</span></div>
-                        <div class="entry-sub"><span>${exp.role}</span><span>${exp.location}</span></div>
-                        <ul class="bullets">${exp.description.split('\n').filter(l => l.trim()).map(l => `<li>${l.trim()}</li>`).join('')}</ul>
-                    </div>
-                `).join('')}</section>` : ''}
-                ${projects.length ? `<section><h3>Projects & Achievements</h3>${projects.map(p => `
-                    <div class="entry">
-                        <div class="sidebar-item-bold">${p.name}</div>
-                        <p>${p.description}</p>
-                    </div>
-                `).join('')}</section>` : ''}
+
+        <section>
+            <h3>Professional Summary</h3>
+            <p>${personal.summary || ''}</p>
+        </section>
+
+        <section>
+            <h3>Work Experience</h3>
+            ${experience.map(exp => `
+                <div class="entry">
+                    <div class="entry-header"><span>${exp.company}</span><span>${exp.dates}</span></div>
+                    <div class="entry-sub"><span>${exp.role}</span><span>${exp.location}</span></div>
+                    <ul class="bullets">
+                        ${exp.description.split('\n').filter(l => l.trim()).map(l => `<li>${l.trim()}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('')}
+        </section>
+
+        <section>
+            <h3>Projects & Achievements</h3>
+            <ul class="bullets">
+                ${projects.map(p => `<li><span style="font-weight:bold">${p.name}:</span> ${p.description}</li>`).join('')}
+            </ul>
+        </section>
+
+        <section>
+            <h3>Technical Skills</h3>
+            ${skills.map(cat => `
+                <div class="skill-line">
+                    <span class="skill-name">${cat.name}:</span> ${cat.skills.join(', ')}
+                </div>
+            `).join('')}
+        </section>
+
+        ${softSkills ? `<section><h3>Soft Skills</h3><p>${softSkills}</p></section>` : ''}
+        ${languages ? `<section><h3>Languages</h3><p>${languages}</p></section>` : ''}
+
+        <section>
+            <h3>Certifications</h3>
+            <ul class="bullets">
+                ${certifications.map(cert => `<li>${cert.name}</li>`).join('')}
+            </ul>
+        </section>
+
+        ${hobbies ? `<section><h3>Interests & Hobbies</h3><ul class="bullets">${hobbies.split(',').map(h => `<li>${h.trim()}</li>`).join('')}</ul></section>` : ''}
+
+        <section>
+            <h3>Education</h3>
+            ${education.map(edu => `
+                <div class="entry">
+                    <div class="entry-header"><span>${edu.school}</span><span>${edu.dates}</span></div>
+                    <div class="entry-sub"><span>${edu.degree}</span><span>${edu.grade}</span></div>
+                </div>
+            `).join('')}
+        </section>
+
+        <!-- Declaration & Signature -->
+        <div class="declaration-section">
+            <p>Declaration:</p>
+            <p>${personal.declaration || ''}</p>
+            <div class="signature-grid">
+                <div class="sig-left">
+                    <div>Place: ${personal.place || ''}</div>
+                    <div>Date: ${personal.date || ''}</div>
+                </div>
+                <div class="sig-right">
+                    <div>(${personal.preferredName || personal.fullName || ''})</div>
+                    <div>(preferred name: ${personal.preferredName || ''})</div>
+                </div>
             </div>
         </div>
     `;
 
     preview.innerHTML = html;
-    lucide.createIcons(); // Vital for dynamic icons in preview
 }
 
 function exportToJson() {
@@ -262,10 +314,23 @@ function importFromJson(e) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
-        Object.assign(state, JSON.parse(event.target.result));
+        const data = JSON.parse(event.target.result);
+        Object.assign(state, data);
         ['experience-list', 'education-list', 'certification-list', 'project-list', 'skills-list'].forEach(id => document.getElementById(id).innerHTML = '');
-        const inputs = ['fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location', 'summary', 'portfolio'];
-        inputs.forEach(id => { const el = document.getElementById(id); if (el) el.value = state.personal[id] || ''; });
+
+        const inputs = [
+            'fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location',
+            'summary', 'portfolio', 'roles', 'declaration', 'place', 'date',
+            'preferredName', 'softSkills', 'languages', 'hobbies'
+        ];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                if (['softSkills', 'languages', 'hobbies'].includes(id)) el.value = state[id] || '';
+                else el.value = state.personal[id] || '';
+            }
+        });
+
         state.experience.forEach(renderExperienceItem);
         state.education.forEach(renderEducationItem);
         state.certifications.forEach(renderCertificationItem);
@@ -278,109 +343,99 @@ function importFromJson(e) {
 
 async function exportToDocx() {
     try {
-        console.log("Checking DOCX library...", window.docx);
         const docxLib = window.docx || (typeof docx !== 'undefined' ? docx : null);
-        if (!docxLib) {
-            alert("DOCX library not loaded yet. Please wait a few seconds or check your connection.");
-            return;
-        }
+        if (!docxLib) { alert("DOCX library not loaded yet."); return; }
         const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docxLib;
 
         const children = [];
 
         // Header
-        const nameParts = (state.personal.fullName || 'YOUR NAME').split(' ');
-        const surname = nameParts.length > 1 ? nameParts.pop() : '';
-        const firstName = nameParts.join(' ');
-
         children.push(
             new Paragraph({
+                text: (state.personal.fullName || 'YOUR NAME').toUpperCase(),
+                heading: HeadingLevel.HEADING_1,
                 alignment: AlignmentType.CENTER,
-                children: [
-                    new TextRun({ text: firstName + " ", bold: true, size: 48 }),
-                    new TextRun({ text: surname, size: 48 }),
-                ]
             }),
-            new Paragraph({ text: (state.personal.jobTitle || '').toUpperCase(), alignment: AlignmentType.CENTER, spacing: { before: 100 } }),
             new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
-                    new TextRun(state.personal.phone || ''),
-                    new TextRun(state.personal.email ? ` | ${state.personal.email}` : ''),
-                    new TextRun(state.personal.location ? ` | ${state.personal.location}` : ''),
-                    new TextRun(state.personal.linkedin ? ` | ${state.personal.linkedin}` : ''),
-                    new TextRun(state.personal.portfolio ? ` | ${state.personal.portfolio}` : ''),
+                    new TextRun(state.personal.email || ''),
+                    new TextRun(state.personal.phone ? `    ${state.personal.phone}` : ''),
+                ]
+            }),
+            new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                    new TextRun(state.personal.linkedin || ''),
+                    new TextRun(state.personal.location ? `   ${state.personal.location}` : ''),
                 ],
-                spacing: { after: 300 },
+                spacing: { after: 200 }
             })
         );
 
-        // Sidebar + Main Content as a Table for 2-column layout in DOCX
-        const sidebarChildren = [
-            new Paragraph({ text: "EDUCATION", heading: HeadingLevel.HEADING_3 }),
-            ...state.education.flatMap(edu => [
-                new Paragraph({ text: edu.school, bold: true, spacing: { before: 100 } }),
-                new Paragraph({ text: edu.degree }),
-                new Paragraph({ text: `${edu.dates} ${edu.grade ? `| ${edu.grade}` : ''}`, size: 18 }),
-            ]),
-            new Paragraph({ text: "SKILLS", heading: HeadingLevel.HEADING_3, spacing: { before: 200 } }),
-            ...state.skills.flatMap(cat => [
-                new Paragraph({ text: cat.name, bold: true, size: 18 }),
-                new Paragraph({ text: cat.skills.join(', '), size: 18 }),
-            ]),
-            new Paragraph({ text: "CERTIFICATIONS", heading: HeadingLevel.HEADING_3, spacing: { before: 200 } }),
-            ...state.certifications.map(cert => new Paragraph({ text: cert.name, size: 18 })),
-        ];
+        if (state.personal.roles) {
+            const roles = state.personal.roles.split(',').map(r => r.trim()).filter(Boolean);
+            children.push(new Paragraph({
+                text: `|| ${roles.join(' || ')} ||`,
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 300 }
+            }));
+        }
 
-        const mainChildren = [
-            ...(state.personal.summary ? [
-                new Paragraph({ text: "ABOUT ME", heading: HeadingLevel.HEADING_3 }),
-                new Paragraph({ text: state.personal.summary, spacing: { after: 200 } })
-            ] : []),
-            ...(state.experience.length ? [
-                new Paragraph({ text: "WORK EXPERIENCE", heading: HeadingLevel.HEADING_3 }),
-                ...state.experience.flatMap(exp => [
-                    new Paragraph({
-                        children: [new TextRun({ text: exp.company, bold: true }), new TextRun({ text: `\t${exp.dates}`, bold: true })]
-                    }),
-                    new Paragraph({
-                        children: [new TextRun({ text: exp.role, italic: true }), new TextRun({ text: `\t${exp.location}`, italic: true })]
-                    }),
-                    ...exp.description.split('\n').filter(l => l.trim()).map(l => new Paragraph({ text: l.trim(), bullet: { level: 0 } })),
-                    new Paragraph({ text: "", spacing: { after: 100 } })
-                ])
-            ] : []),
-            ...(state.projects.length ? [
-                new Paragraph({ text: "PROJECTS", heading: HeadingLevel.HEADING_3 }),
-                ...state.projects.flatMap(p => [
-                    new Paragraph({ text: p.name, bold: true }),
-                    new Paragraph({ text: p.description, spacing: { after: 100 } })
-                ])
-            ] : [])
-        ];
+        const addSection = (title, contentLines) => {
+            children.push(new Paragraph({ text: title, heading: HeadingLevel.HEADING_3, border: { bottom: { color: "auto", space: 1, value: "single", size: 6 } } }));
+            contentLines.forEach(line => {
+                if (typeof line === 'string') children.push(new Paragraph({ text: line }));
+                else children.push(line);
+            });
+        };
 
-        const table = new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            borders: { top: BorderStyle.NONE, bottom: BorderStyle.NONE, left: BorderStyle.NONE, right: BorderStyle.NONE, insideHorizontal: BorderStyle.NONE, insideVertical: BorderStyle.NONE },
-            rows: [
-                new TableRow({
-                    children: [
-                        new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, children: sidebarChildren }),
-                        new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, children: mainChildren }),
-                    ]
-                })
+        // Summary
+        addSection("Professional Summary", [new Paragraph({ text: state.personal.summary })]);
+
+        // Experience
+        if (state.experience.length) {
+            children.push(new Paragraph({ text: "Work Experience", heading: HeadingLevel.HEADING_3 }));
+            state.experience.forEach(exp => {
+                children.push(new Paragraph({
+                    children: [new TextRun({ text: exp.company, bold: true }), new TextRun({ text: `\t${exp.dates}`, bold: true })]
+                }));
+                children.push(new Paragraph({
+                    children: [new TextRun({ text: exp.role, italic: true }), new TextRun({ text: `\t${exp.location}`, italic: true })]
+                }));
+                exp.description.split('\n').filter(l => l.trim()).forEach(l => {
+                    children.push(new Paragraph({ text: l.trim(), bullet: { level: 0 } }));
+                });
+            });
+        }
+
+        // Skills, Hobbies, etc.
+        if (state.skills.length) {
+            addSection("Technical Skills", state.skills.map(cat => new Paragraph({
+                children: [new TextRun({ text: `${cat.name}: `, bold: true }), new TextRun(cat.skills.join(', '))]
+            })));
+        }
+
+        // Footer
+        children.push(new Paragraph({ text: "Declaration:", spacing: { before: 400 } }));
+        children.push(new Paragraph({ text: state.personal.declaration }));
+
+        children.push(new Paragraph({
+            children: [
+                new TextRun(`Place: ${state.personal.place}\t\t\t\t\t(${state.personal.preferredName || state.personal.fullName})`),
+            ],
+            spacing: { before: 200 }
+        }));
+        children.push(new Paragraph({
+            children: [
+                new TextRun(`Date: ${state.personal.date}\t\t\t\t\t(preferred name: ${state.personal.preferredName})`),
             ]
-        });
-
-        children.push(table);
+        }));
 
         const doc = new Document({ sections: [{ children }] });
         const blob = await Packer.toBlob(doc);
         saveAs(blob, "resume.docx");
-    } catch (err) {
-        console.error(err);
-        alert("Error exporting DOCX: " + err.message);
-    }
+    } catch (err) { console.error(err); alert("Error: " + err.message); }
 }
 
 init();
