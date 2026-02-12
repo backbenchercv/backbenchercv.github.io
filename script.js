@@ -236,11 +236,24 @@ function updatePreview() {
 
     // Contact Items with Icons
     const contactItems = [];
-    if (personal.email) contactItems.push(`<div class="contact-item"><i data-lucide="mail"></i> ${personal.email}</div>`);
-    if (personal.phone) contactItems.push(`<div class="contact-item"><i data-lucide="phone"></i> ${personal.phone}</div>`);
-    if (personal.linkedin) contactItems.push(`<div class="contact-item"><i data-lucide="linkedin"></i> ${personal.linkedin.replace(/https?:\/\/(www\.)?/, '')}</div>`);
-    if (personal.location) contactItems.push(`<div class="contact-item"><i data-lucide="map-pin"></i> ${personal.location}</div>`);
-    if (personal.portfolio) contactItems.push(`<div class="contact-item"><i data-lucide="globe"></i> ${personal.portfolio.replace(/https?:\/\/(www\.)?/, '')}</div>`);
+    if (personal.email) {
+        contactItems.push(`<div class="contact-item"><i data-lucide="mail"></i> <a href="mailto:${personal.email}">${personal.email}</a></div>`);
+    }
+    if (personal.phone) {
+        const cleanPhone = personal.phone.replace(/[^0-9+]/g, '');
+        contactItems.push(`<div class="contact-item"><i data-lucide="phone"></i> <a href="tel:${cleanPhone}">${personal.phone}</a></div>`);
+    }
+    if (personal.linkedin) {
+        const link = personal.linkedin.startsWith('http') ? personal.linkedin : `https://${personal.linkedin}`;
+        contactItems.push(`<div class="contact-item"><i data-lucide="linkedin"></i> <a href="${link}" target="_blank">${personal.linkedin.replace(/https?:\/\/(www\.)?/, '')}</a></div>`);
+    }
+    if (personal.location) {
+        contactItems.push(`<div class="contact-item"><i data-lucide="map-pin"></i> ${personal.location}</div>`);
+    }
+    if (personal.portfolio) {
+        const link = personal.portfolio.startsWith('http') ? personal.portfolio : `https://${personal.portfolio}`;
+        contactItems.push(`<div class="contact-item"><i data-lucide="globe"></i> <a href="${link}" target="_blank">${personal.portfolio.replace(/https?:\/\/(www\.)?/, '')}</a></div>`);
+    }
 
     let rolesHtml = '';
     if (personal.roles) {
