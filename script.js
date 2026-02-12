@@ -1,40 +1,67 @@
 const state = {
     personal: {
-        fullName: '',
-        jobTitle: '',
-        email: '',
-        phone: '',
-        linkedin: '',
-        location: '',
-        summary: '',
-        portfolio: '',
-        roles: '',
-        declaration: 'I hereby declare that the above written particulars are true to the best of my knowledge and belief.',
-        place: 'Hyderabad',
-        date: '',
-        preferredName: ''
+        fullName: 'JOHN DOE',
+        jobTitle: 'Software Engineer',
+        email: 'john.doe@example.com',
+        phone: '+91 1234567890',
+        linkedin: 'linkedin.com/in/johndoe',
+        location: 'Hyderabad, India',
+        summary: 'A highly motivated software professional with expertise in web development and cloud technologies.',
+        portfolio: 'johndoe.dev',
+        roles: 'Senior Developer, Full Stack Engineer, Tech Lead'
     },
     experience: [],
     education: [],
-    skills: [],
-    softSkills: '',
-    languages: '',
-    hobbies: '',
+    skills: [
+        { id: 1, name: 'Technical Skills', skills: ['JavaScript', 'React', 'Node.js', 'Python'] }
+    ],
+    softSkills: 'Team Leadership, Communication, Problem Solving',
+    languages: 'English, Hindi, Telugu',
+    hobbies: 'Coding, Reading, Traveling',
     certifications: [],
     projects: []
 };
 
 function init() {
     setupEventListeners();
-    addSkillCategory('Technical Skills');
     updatePreview();
+    syncFormWithState();
+}
+
+function syncFormWithState() {
+    const inputs = [
+        'fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location',
+        'summary', 'portfolio', 'roles', 'softSkills', 'languages', 'hobbies'
+    ];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            if (['softSkills', 'languages', 'hobbies'].includes(id)) {
+                el.value = state[id] || '';
+            } else {
+                el.value = state.personal[id] || '';
+            }
+        }
+    });
+
+    // Clear and re-render dynamic sections
+    document.getElementById('experience-list').innerHTML = '';
+    document.getElementById('education-list').innerHTML = '';
+    document.getElementById('certification-list').innerHTML = '';
+    document.getElementById('project-list').innerHTML = '';
+    document.getElementById('skills-list').innerHTML = '';
+
+    state.experience.forEach(renderExperienceItem);
+    state.education.forEach(renderEducationItem);
+    state.certifications.forEach(renderCertificationItem);
+    state.projects.forEach(renderProjectItem);
+    state.skills.forEach(addSkillCategoryFromData);
 }
 
 function setupEventListeners() {
     const inputs = [
         'fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location',
-        'summary', 'portfolio', 'roles', 'declaration', 'place', 'date',
-        'preferredName', 'softSkills', 'languages', 'hobbies'
+        'summary', 'portfolio', 'roles', 'softSkills', 'languages', 'hobbies'
     ];
     inputs.forEach(id => {
         const el = document.getElementById(id);
@@ -55,7 +82,6 @@ function setupEventListeners() {
     document.getElementById('importJson').addEventListener('click', () => document.getElementById('jsonInput').click());
     document.getElementById('jsonInput').addEventListener('change', importFromJson);
     document.getElementById('printResume').addEventListener('click', () => window.print());
-    document.getElementById('exportDocx').addEventListener('click', exportToDocx);
 }
 
 function addItem(type) {
@@ -197,20 +223,24 @@ function updatePreview() {
     const { personal, experience, education, skills, certifications, projects, softSkills, languages, hobbies } = state;
 
     if (!personal.fullName && experience.length === 0 && education.length === 0) {
-        preview.innerHTML = `<div class="preview-placeholder"><i data-lucide="eye" size="48"></i><p>Enter details for live preview</p></div>`;
+        preview.innerHTML = '<div class="preview-placeholder"><i data-lucide="eye" size="48"></i><p>Enter details for live preview</p></div>';
         lucide.createIcons();
         return;
     }
 
-    // Header Construction
-    let contactLines = [];
-    if (personal.email || personal.phone) {
-        contactLines.push(`${personal.email || ''}${personal.email && personal.phone ? ' &nbsp;&nbsp;&nbsp;&nbsp; ' : ''}${personal.phone || ''}`);
-    }
-    if (personal.linkedin || personal.location || personal.portfolio) {
-        const parts = [personal.linkedin, personal.location, personal.portfolio].filter(Boolean);
-        contactLines.push(parts.join(' &nbsp;&nbsp;&nbsp; '));
-    }
+    // Name Splitting (Bold/Thin)
+    const nameParts = (personal.fullName || 'YOUR NAME').trim().split(' ');
+    let firstName = personal.fullName ? nameParts.slice(0, -1).join(' ') : 'YOUR';
+    let lastName = personal.fullName ? nameParts.slice(-1)[0] : 'NAME';
+    if (!firstName && personal.fullName) { firstName = personal.fullName; lastName = ''; }
+
+    // Contact Items with Icons
+    const contactItems = [];
+    if (personal.email) contactItems.push(`<div class="contact-item"><i data-lucide="mail"></i> ${personal.email}</div>`);
+    if (personal.phone) contactItems.push(`<div class="contact-item"><i data-lucide="phone"></i> ${personal.phone}</div>`);
+    if (personal.linkedin) contactItems.push(`<div class="contact-item"><i data-lucide="linkedin"></i> ${personal.linkedin.replace(/https?:\/\/(www\.)?/, '')}</div>`);
+    if (personal.location) contactItems.push(`<div class="contact-item"><i data-lucide="map-pin"></i> ${personal.location}</div>`);
+    if (personal.portfolio) contactItems.push(`<div class="contact-item"><i data-lucide="globe"></i> ${personal.portfolio.replace(/https?:\/\/(www\.)?/, '')}</div>`);
 
     let rolesHtml = '';
     if (personal.roles) {
@@ -222,9 +252,12 @@ function updatePreview() {
 
     let html = `
         <div class="resume-header">
-            <div class="name-container">${(personal.fullName || 'YOUR NAME').toUpperCase()}</div>
+            <div class="name-container">
+                <span class="first-name">${firstName.toUpperCase()}</span>
+                <span class="last-name">${lastName.toUpperCase()}</span>
+            </div>
             <div class="contact-bar">
-                ${contactLines.map(line => `<div>${line}</div>`).join('')}
+                ${contactItems.join('')}
             </div>
             ${rolesHtml}
         </div>
@@ -234,6 +267,7 @@ function updatePreview() {
             <p>${personal.summary || ''}</p>
         </section>
 
+        ${experience.length ? `
         <section>
             <h3>Work Experience</h3>
             ${experience.map(exp => `
@@ -245,36 +279,40 @@ function updatePreview() {
                     </ul>
                 </div>
             `).join('')}
-        </section>
+        </section>` : ''}
 
+        ${projects.length ? `
         <section>
             <h3>Projects & Achievements</h3>
             <ul class="bullets">
                 ${projects.map(p => `<li><span style="font-weight:bold">${p.name}:</span> ${p.description}</li>`).join('')}
             </ul>
-        </section>
+        </section>` : ''}
 
+        ${skills.length ? `
         <section>
             <h3>Technical Skills</h3>
-            ${skills.map(cat => `
+            ${skills.map(cat => cat.skills.length ? `
                 <div class="skill-line">
                     <span class="skill-name">${cat.name}:</span> ${cat.skills.join(', ')}
                 </div>
-            `).join('')}
-        </section>
+            ` : '').join('')}
+        </section>` : ''}
 
         ${softSkills ? `<section><h3>Soft Skills</h3><p>${softSkills}</p></section>` : ''}
         ${languages ? `<section><h3>Languages</h3><p>${languages}</p></section>` : ''}
 
+        ${certifications.length ? `
         <section>
             <h3>Certifications</h3>
             <ul class="bullets">
                 ${certifications.map(cert => `<li>${cert.name}</li>`).join('')}
             </ul>
-        </section>
+        </section>` : ''}
 
         ${hobbies ? `<section><h3>Interests & Hobbies</h3><ul class="bullets">${hobbies.split(',').map(h => `<li>${h.trim()}</li>`).join('')}</ul></section>` : ''}
 
+        ${education.length ? `
         <section>
             <h3>Education</h3>
             ${education.map(edu => `
@@ -283,30 +321,34 @@ function updatePreview() {
                     <div class="entry-sub"><span>${edu.degree}</span><span>${edu.grade}</span></div>
                 </div>
             `).join('')}
-        </section>
-
-        <!-- Declaration & Signature -->
-        <div class="declaration-section">
-            <p>Declaration:</p>
-            <p>${personal.declaration || ''}</p>
-            <div class="signature-grid">
-                <div class="sig-left">
-                    <div>Place: ${personal.place || ''}</div>
-                    <div>Date: ${personal.date || ''}</div>
-                </div>
-                <div class="sig-right">
-                    <div>(${personal.preferredName || personal.fullName || ''})</div>
-                    <div>(preferred name: ${personal.preferredName || ''})</div>
-                </div>
-            </div>
-        </div>
+        </section>` : ''}
     `;
 
     preview.innerHTML = html;
+    lucide.createIcons();
 }
 
 function exportToJson() {
-    saveAs(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }), 'resume-data.json');
+    try {
+        const dataStr = JSON.stringify(state, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+
+        if (window.saveAs) {
+            window.saveAs(blob, 'resume-data.json');
+        } else {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'resume-data.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    } catch (err) {
+        console.error('Export failed:', err);
+        alert('Failed to export JSON: ' + err.message);
+    }
 }
 
 function importFromJson(e) {
@@ -314,128 +356,16 @@ function importFromJson(e) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (event) => {
-        const data = JSON.parse(event.target.result);
-        Object.assign(state, data);
-        ['experience-list', 'education-list', 'certification-list', 'project-list', 'skills-list'].forEach(id => document.getElementById(id).innerHTML = '');
-
-        const inputs = [
-            'fullName', 'jobTitle', 'email', 'phone', 'linkedin', 'location',
-            'summary', 'portfolio', 'roles', 'declaration', 'place', 'date',
-            'preferredName', 'softSkills', 'languages', 'hobbies'
-        ];
-        inputs.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (['softSkills', 'languages', 'hobbies'].includes(id)) el.value = state[id] || '';
-                else el.value = state.personal[id] || '';
-            }
-        });
-
-        state.experience.forEach(renderExperienceItem);
-        state.education.forEach(renderEducationItem);
-        state.certifications.forEach(renderCertificationItem);
-        state.projects.forEach(renderProjectItem);
-        state.skills.forEach(addSkillCategoryFromData);
-        updatePreview();
+        try {
+            const data = JSON.parse(event.target.result);
+            Object.assign(state, data);
+            syncFormWithState();
+            updatePreview();
+        } catch (err) {
+            alert('Error parsing JSON file: ' + err.message);
+        }
     };
     reader.readAsText(file);
-}
-
-async function exportToDocx() {
-    try {
-        const docxLib = window.docx || (typeof docx !== 'undefined' ? docx : null);
-        if (!docxLib) { alert("DOCX library not loaded yet."); return; }
-        const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docxLib;
-
-        const children = [];
-
-        // Header
-        children.push(
-            new Paragraph({
-                text: (state.personal.fullName || 'YOUR NAME').toUpperCase(),
-                heading: HeadingLevel.HEADING_1,
-                alignment: AlignmentType.CENTER,
-            }),
-            new Paragraph({
-                alignment: AlignmentType.CENTER,
-                children: [
-                    new TextRun(state.personal.email || ''),
-                    new TextRun(state.personal.phone ? `    ${state.personal.phone}` : ''),
-                ]
-            }),
-            new Paragraph({
-                alignment: AlignmentType.CENTER,
-                children: [
-                    new TextRun(state.personal.linkedin || ''),
-                    new TextRun(state.personal.location ? `   ${state.personal.location}` : ''),
-                ],
-                spacing: { after: 200 }
-            })
-        );
-
-        if (state.personal.roles) {
-            const roles = state.personal.roles.split(',').map(r => r.trim()).filter(Boolean);
-            children.push(new Paragraph({
-                text: `|| ${roles.join(' || ')} ||`,
-                alignment: AlignmentType.CENTER,
-                spacing: { after: 300 }
-            }));
-        }
-
-        const addSection = (title, contentLines) => {
-            children.push(new Paragraph({ text: title, heading: HeadingLevel.HEADING_3, border: { bottom: { color: "auto", space: 1, value: "single", size: 6 } } }));
-            contentLines.forEach(line => {
-                if (typeof line === 'string') children.push(new Paragraph({ text: line }));
-                else children.push(line);
-            });
-        };
-
-        // Summary
-        addSection("Professional Summary", [new Paragraph({ text: state.personal.summary })]);
-
-        // Experience
-        if (state.experience.length) {
-            children.push(new Paragraph({ text: "Work Experience", heading: HeadingLevel.HEADING_3 }));
-            state.experience.forEach(exp => {
-                children.push(new Paragraph({
-                    children: [new TextRun({ text: exp.company, bold: true }), new TextRun({ text: `\t${exp.dates}`, bold: true })]
-                }));
-                children.push(new Paragraph({
-                    children: [new TextRun({ text: exp.role, italic: true }), new TextRun({ text: `\t${exp.location}`, italic: true })]
-                }));
-                exp.description.split('\n').filter(l => l.trim()).forEach(l => {
-                    children.push(new Paragraph({ text: l.trim(), bullet: { level: 0 } }));
-                });
-            });
-        }
-
-        // Skills, Hobbies, etc.
-        if (state.skills.length) {
-            addSection("Technical Skills", state.skills.map(cat => new Paragraph({
-                children: [new TextRun({ text: `${cat.name}: `, bold: true }), new TextRun(cat.skills.join(', '))]
-            })));
-        }
-
-        // Footer
-        children.push(new Paragraph({ text: "Declaration:", spacing: { before: 400 } }));
-        children.push(new Paragraph({ text: state.personal.declaration }));
-
-        children.push(new Paragraph({
-            children: [
-                new TextRun(`Place: ${state.personal.place}\t\t\t\t\t(${state.personal.preferredName || state.personal.fullName})`),
-            ],
-            spacing: { before: 200 }
-        }));
-        children.push(new Paragraph({
-            children: [
-                new TextRun(`Date: ${state.personal.date}\t\t\t\t\t(preferred name: ${state.personal.preferredName})`),
-            ]
-        }));
-
-        const doc = new Document({ sections: [{ children }] });
-        const blob = await Packer.toBlob(doc);
-        saveAs(blob, "resume.docx");
-    } catch (err) { console.error(err); alert("Error: " + err.message); }
 }
 
 init();

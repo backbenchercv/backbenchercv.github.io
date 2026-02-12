@@ -313,19 +313,41 @@ textarea:focus {
 }
 
 #resume-preview .name-container {
-    font-size: 22pt;
-    font-weight: bold;
+    font-size: 24pt;
     text-transform: uppercase;
     margin-bottom: 2pt;
+    display: flex;
+    justify-content: center;
+    gap: 6pt;
+}
+
+#resume-preview .first-name {
+    font-weight: 800;
+}
+
+#resume-preview .last-name {
+    font-weight: 200;
 }
 
 #resume-preview .contact-bar {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 15pt;
-    font-size: 10pt;
+    gap: 12pt;
+    font-size: 9.5pt;
     margin-bottom: 3pt;
+}
+
+#resume-preview .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+}
+
+#resume-preview .contact-item svg {
+    width: 9pt;
+    height: 9pt;
+    stroke: #333;
 }
 
 #resume-preview .roles-bar {
@@ -398,23 +420,6 @@ textarea:focus {
     margin-bottom: 5pt;
 }
 
-/* Footer Section: Declaration & Signature */
-#resume-preview .declaration-section {
-    margin-top: 20pt;
-    font-size: 10pt;
-    text-align: left;
-}
-
-#resume-preview .signature-grid {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15pt;
-    font-size: 10pt;
-}
-
-#resume-preview .sig-right {
-    text-align: right;
-}
 
 /* Print Specific Overrides */
 @media print {
@@ -422,6 +427,7 @@ textarea:focus {
         background: white !important;
         margin: 0;
         padding: 0;
+        overflow: visible !important;
     }
 
     body>*:not(main),
@@ -441,26 +447,32 @@ textarea:focus {
         display: block !important;
         padding: 0 !important;
         margin: 0 !important;
+        overflow: visible !important;
+        max-height: none !important;
+        position: static !important;
+        background: transparent !important;
     }
 
     #resume-preview {
         position: static !important;
-        width: 210mm !important;
-        min-height: 297mm !important;
+        width: 100% !important;
+        min-height: auto !important;
         padding: 10mm 15mm !important;
         box-shadow: none !important;
         transform: none !important;
         border: none !important;
         display: block !important;
         visibility: visible !important;
+        overflow: visible !important;
     }
 
     #resume-preview * {
         visibility: visible !important;
+        overflow: visible !important;
     }
 
     @page {
         size: A4;
-        margin: 0;
+        margin: 10mm 0;
     }
 }
