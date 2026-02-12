@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.3/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
+
 <body>
     <div class="bg-overlay"></div>
-    
+
     <header>
         <div class="header-content">
             <h1 class="logo">BACKBENCHER <span class="accent">ATS</span></h1>
@@ -51,12 +53,17 @@
                         <input type="text" id="linkedin" placeholder="e.g. linkedin.com/in/username">
                     </div>
                     <div class="form-group full-width">
+                        <label for="portfolio">Portfolio/Website URL</label>
+                        <input type="text" id="portfolio" placeholder="e.g. yourportfolio.com">
+                    </div>
+                    <div class="form-group full-width">
                         <label for="location">Location</label>
                         <input type="text" id="location" placeholder="e.g. Hyderabad, India">
                     </div>
                     <div class="form-group full-width">
-                        <label for="summary">Professional Summary</label>
-                        <textarea id="summary" rows="4" placeholder="Briefly describe your professional background and key strengths..."></textarea>
+                        <label for="summary">About Me</label>
+                        <textarea id="summary" rows="4"
+                            placeholder="Briefly describe your professional background and key strengths..."></textarea>
                     </div>
                 </div>
             </div>
@@ -80,7 +87,8 @@
             <div class="card" id="skills-section">
                 <div class="section-header">
                     <h2><i data-lucide="wrench"></i> Core Competencies (Skills)</h2>
-                    <button class="btn-add" onclick="addSkillCategory()"><i data-lucide="plus"></i> Add Category</button>
+                    <button class="btn-add" onclick="addSkillCategory()"><i data-lucide="plus"></i> Add
+                        Category</button>
                 </div>
                 <div id="skills-list" class="dynamic-list"></div>
             </div>
@@ -118,4 +126,5 @@
         lucide.createIcons();
     </script>
 </body>
+
 </html>
